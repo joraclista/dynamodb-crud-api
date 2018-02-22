@@ -20,3 +20,19 @@ This api works with AWS DynamoDB thus you should have
 ### Build & Test
 This is a regular, Maven based project.
 Just run `mvn clean package`
+
+### Usage
+
+1. Create crud wrapper api which will be working with your dynamoDB table:
+1.1 Create amazon dynamodb client instance using desired credentials provider and aws region the db resides in:
+```java
+ AmazonDynamoDB amazonClient = AmazonDynamoDBClientBuilder.standard()
+                .withCredentials(new DefaultAWSCredentialsProviderChain())
+                .withRegion(Regions.US_EAST_1)
+                .build();
+```
+
+1.2 Create crud wrapper api passing amazon dynamodb client, table name, key representation and (optionally) supplier for "not found" exception:
+```java
+
+```

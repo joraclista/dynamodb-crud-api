@@ -52,7 +52,7 @@ public class DynamoDBEntityDeleteTest {
         assertNull(item.get(propertyName));
     }
 
-    @ParameterizedTest(name = "Set Delete Properties Test: For item id = \"{0}\" : \"{1}\" should be null")
+    @ParameterizedTest(name = "Delete Properties Test: For item id = \"{0}\" : \"{1}\" should be null")
     @CsvSource({
             "555, title, Mabel Wide Faux Leather Belt, price, 19.9",
             "556, title, Mabel Wide Faux Leather Belt, price, 150.00"
@@ -67,7 +67,7 @@ public class DynamoDBEntityDeleteTest {
         assertNull(item.get(propertyName2));
     }
 
-    @ParameterizedTest(name = "Set Delete Item Test: For item id = \"{0}\" : \"{1}\" should throw exception on attempt to get item by id")
+    @ParameterizedTest(name = "Delete Item Test: For item id = \"{0}\" : \"{1}\" should throw exception on attempt to get item by id")
     @CsvSource({
             "771, title, Mabel Wide Faux Leather Belt",
             "772, title, Taffy swing dress"

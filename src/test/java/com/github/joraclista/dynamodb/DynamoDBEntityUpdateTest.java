@@ -37,7 +37,7 @@ public class DynamoDBEntityUpdateTest {
         productsEditionsService = new ProductsEditionsService(new LowLevelDao(new DynamoDB(amazonClient)));
     }
 
-    @ParameterizedTest(name = "Set Item Property Test: For item id = \"{0}\" : \"{1}\" should be \"{2}\"")
+    @ParameterizedTest(name = "Update Item Property Test: For item id = \"{0}\" : \"{1}\" should be \"{2}\"")
     @CsvSource({
             "123, title, Taffy swing dress",
             "123, merchantId, jadore-you",
@@ -58,7 +58,7 @@ public class DynamoDBEntityUpdateTest {
         assertEquals(item.get(propertyName), propertyValue);
     }
 
-    @ParameterizedTest(name = "Set Item Properties Test: For item id = \"{0}\" : \"{1}\" should be \"{2}\"")
+    @ParameterizedTest(name = "Update Item Properties Test: For item id = \"{0}\" : \"{1}\" should be \"{2}\"")
     @CsvSource({
             "223, title, Mabel Wide Faux Leather Belt, merchantId, jadore-you",
             "224, title, Mabel Wide Faux Leather Belt, merchantId, aftershock-london",

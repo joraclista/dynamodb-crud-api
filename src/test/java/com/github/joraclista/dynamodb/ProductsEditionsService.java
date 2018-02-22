@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductsEditionsService extends BaseEditionsService {
 
-    public static final String TABLE = "Products";
+    public static final String TABLE = "ShopProducts";
     public static final String EVENT_ID = "id";
 
 

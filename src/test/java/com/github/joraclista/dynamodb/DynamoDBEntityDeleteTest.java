@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(JUnitPlatform.class)
 public class DynamoDBEntityDeleteTest {
 
-    private static ProductsEditionsService productsEditionsService;
+    private static ProductsTableCRUDService productsTableCRUDService;
 
     @BeforeAll
     static void setup() {
@@ -35,7 +35,7 @@ public class DynamoDBEntityDeleteTest {
                 .withCredentials(new DefaultAWSCredentialsProviderChain())
                 .withRegion(Regions.US_EAST_1)
                 .build();
-        productsEditionsService = new ProductsEditionsService(new LowLevelDao(new DynamoDB(amazonClient)));
+        productsTableCRUDService = new ProductsTableCRUDService(new LowLevelDao(new DynamoDB(amazonClient)));
     }
 
     @ParameterizedTest(name = "Delete Item Property Test: For item id = \"{0}\" : \"{1}\" should be null")
@@ -45,10 +45,10 @@ public class DynamoDBEntityDeleteTest {
     })
     @Test
     public void testDeleteItemProperty(String id, String propertyName, Object propertyValue) {
-        productsEditionsService.setItemProperty(id, propertyName, propertyValue);
+        productsTableCRUDService.setItemProperty(id, propertyName, propertyValue);
 
-        productsEditionsService.deleteItemProperty(id, propertyName);
-        Map<String, Object> item = productsEditionsService.getItem(id);
+        productsTableCRUDService.deleteItemProperty(id, propertyName);
+        Map<String, Object> item = productsTableCRUDService.getItem(id);
         assertNull(item.get(propertyName));
     }
 
@@ -59,10 +59,10 @@ public class DynamoDBEntityDeleteTest {
     })
     @Test
     public void testDeleteItemProperties(String id, String propertyName1, Object propertyValue1, String propertyName2, Object propertyValue2) {
-        productsEditionsService.setItemProperties(id, of(propertyName1, propertyValue1, propertyName2, propertyValue2));
+        productsTableCRUDService.setItemProperties(id, of(propertyName1, propertyValue1, propertyName2, propertyValue2));
 
-        productsEditionsService.deleteItemProperties(id, ImmutableList.of(propertyName1, propertyName2));
-        Map<String, Object> item = productsEditionsService.getItem(id);
+        productsTableCRUDService.deleteItemProperties(id, ImmutableList.of(propertyName1, propertyName2));
+        Map<String, Object> item = productsTableCRUDService.getItem(id);
         assertNull(item.get(propertyName1));
         assertNull(item.get(propertyName2));
     }
@@ -74,12 +74,12 @@ public class DynamoDBEntityDeleteTest {
     })
     @Test
     public void testDeleteItem(String id, String propertyName1, Object propertyValue1) {
-        productsEditionsService.setItemProperties(id, of(propertyName1, propertyValue1));
+        productsTableCRUDService.setItemProperties(id, of(propertyName1, propertyValue1));
 
-        boolean deleteItemResult = productsEditionsService.deleteItem(id);
+        boolean deleteItemResult = productsTableCRUDService.deleteItem(id);
         assertTrue(deleteItemResult);
 
-        Throwable exception = assertThrows(RuntimeException.class, () -> productsEditionsService.getItem(id));
+        Throwable exception = assertThrows(RuntimeException.class, () -> productsTableCRUDService.getItem(id));
         assertEquals(exception.getMessage(), "Product can't be found");
     }
 }

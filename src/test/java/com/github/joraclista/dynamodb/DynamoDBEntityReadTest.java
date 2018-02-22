@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RunWith(JUnitPlatform.class)
 public class DynamoDBEntityReadTest {
 
-    private static ProductsEditionsService productsEditionsService;
+    private static ProductsTableCRUDService productsTableCRUDService;
 
     @BeforeAll
     static void setup() {
@@ -34,13 +34,13 @@ public class DynamoDBEntityReadTest {
                 .withCredentials(new DefaultAWSCredentialsProviderChain())
                 .withRegion(Regions.US_EAST_1)
                 .build();
-        productsEditionsService = new ProductsEditionsService(new LowLevelDao(new DynamoDB(amazonClient)));
+        productsTableCRUDService = new ProductsTableCRUDService(new LowLevelDao(new DynamoDB(amazonClient)));
     }
 
     @DisplayName("Read All Items & Display Test")
     @Test
     void testAllItemsDisplay() {
-        productsEditionsService.getAllItems().forEach(item -> log.info("item: id={}, title={}", item.getId(), item.getTitle()));
+        productsTableCRUDService.getAllItems().forEach(item -> log.info("item: [id:title]=[{}:{}]", item.get("id"), item.get("title")));
     }
 
     @DisplayName("Read Item Test")
@@ -54,9 +54,9 @@ public class DynamoDBEntityReadTest {
             "992, status, DISABLED"
     })
     void testGetItem(String id, String propertyName, Object propertyValue) {
-        productsEditionsService.setItemProperty(id, propertyName, propertyValue);
+        productsTableCRUDService.setItemProperty(id, propertyName, propertyValue);
 
-        Map<String, Object> item = productsEditionsService.getItem(id);
+        Map<String, Object> item = productsTableCRUDService.getItem(id);
         assertEquals(item.get(propertyName), propertyValue);
     }
 

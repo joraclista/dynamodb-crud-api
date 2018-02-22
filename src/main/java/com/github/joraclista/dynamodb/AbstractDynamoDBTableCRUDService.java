@@ -3,6 +3,7 @@ package com.github.joraclista.dynamodb;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -11,12 +12,12 @@ import java.util.function.Supplier;
  * version 1.0.
  */
 @Slf4j
-public abstract class BaseEditionsService {
+public abstract class AbstractDynamoDBTableCRUDService {
 
-    protected DynamoDbLowLevelService dynamoDbLowLevelService;
+    protected DynamoDBLowLevelCRUDService dbLowLevelCRUDService;
 
-    public BaseEditionsService(String tableName, LowLevelDao dao, Supplier<? extends RuntimeException> notFoundExceptionSupplier) {
-        dynamoDbLowLevelService = DynamoDbLowLevelService.builder()
+    public AbstractDynamoDBTableCRUDService(String tableName, LowLevelDao dao, Supplier<? extends RuntimeException> notFoundExceptionSupplier) {
+        dbLowLevelCRUDService = DynamoDBLowLevelCRUDService.builder()
                 .tableName(tableName)
                 .notFoundExceptionSupplier(notFoundExceptionSupplier)
                 .dao(dao)
@@ -24,29 +25,32 @@ public abstract class BaseEditionsService {
     }
 
     public Map<String, Object> setItemProperty(String id, String fieldName, Object value) {
-        return dynamoDbLowLevelService.setItemProperty(getKey(id), fieldName, value);
+        return dbLowLevelCRUDService.setItemProperty(getKey(id), fieldName, value);
     }
 
     public Map<String, Object> setItemProperties(String id, Map<String, Object> propertiesMap) {
-        return dynamoDbLowLevelService.setItemProperties(getKey(id), propertiesMap);
+        return dbLowLevelCRUDService.setItemProperties(getKey(id), propertiesMap);
     }
 
     public Map<String, Object> deleteItemProperty(String id, String fieldName) {
-        return dynamoDbLowLevelService.deleteItemProperty(getKey(id), fieldName);
+        return dbLowLevelCRUDService.deleteItemProperty(getKey(id), fieldName);
     }
 
     public Map<String, Object> deleteItemProperties(String id, Collection<String> fieldNames) {
-        return dynamoDbLowLevelService.deleteItemProperties(getKey(id), fieldNames);
+        return dbLowLevelCRUDService.deleteItemProperties(getKey(id), fieldNames);
     }
 
     public boolean deleteItem(String id) {
-        return dynamoDbLowLevelService.deleteItem(getKey(id));
+        return dbLowLevelCRUDService.deleteItem(getKey(id));
     }
 
     public Map<String, Object> getItem(String id) {
-        return dynamoDbLowLevelService.getItem(getKey(id));
+        return dbLowLevelCRUDService.getItem(getKey(id));
     }
 
+    public List<Map<String, Object>> getAllItems() {
+        return dbLowLevelCRUDService.getAllItems();
+    }
 
     protected abstract Key getKey(String id);
 }

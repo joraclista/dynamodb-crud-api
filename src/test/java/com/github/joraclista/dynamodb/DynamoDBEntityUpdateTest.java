@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RunWith(JUnitPlatform.class)
 public class DynamoDBEntityUpdateTest {
 
-    private static ProductsEditionsService productsEditionsService;
+    private static ProductsTableCRUDService productsTableCRUDService;
 
     @BeforeAll
     static void setup() {
@@ -34,7 +34,7 @@ public class DynamoDBEntityUpdateTest {
                 .withCredentials(new DefaultAWSCredentialsProviderChain())
                 .withRegion(Regions.US_EAST_1)
                 .build();
-        productsEditionsService = new ProductsEditionsService(new LowLevelDao(new DynamoDB(amazonClient)));
+        productsTableCRUDService = new ProductsTableCRUDService(new LowLevelDao(new DynamoDB(amazonClient)));
     }
 
     @ParameterizedTest(name = "Update Item Property Test: For item id = \"{0}\" : \"{1}\" should be \"{2}\"")
@@ -53,8 +53,8 @@ public class DynamoDBEntityUpdateTest {
     })
     @Test
     public void testSetItemProperty(String id, String propertyName, Object propertyValue) {
-        productsEditionsService.setItemProperty(id, propertyName, propertyValue);
-        Map<String, Object> item = productsEditionsService.getItem(id);
+        productsTableCRUDService.setItemProperty(id, propertyName, propertyValue);
+        Map<String, Object> item = productsTableCRUDService.getItem(id);
         assertEquals(item.get(propertyName), propertyValue);
     }
 
@@ -67,8 +67,8 @@ public class DynamoDBEntityUpdateTest {
     })
     @Test
     public void testSetItemProperties(String id, String propertyName1, Object propertyValue1, String propertyName2, Object propertyValue2) {
-        productsEditionsService.setItemProperties(id, of(propertyName1, propertyValue1, propertyName2, propertyValue2));
-        Map<String, Object> item = productsEditionsService.getItem(id);
+        productsTableCRUDService.setItemProperties(id, of(propertyName1, propertyValue1, propertyName2, propertyValue2));
+        Map<String, Object> item = productsTableCRUDService.getItem(id);
         assertEquals(item.get(propertyName1), propertyValue1);
         assertEquals(item.get(propertyName2), propertyValue2);
     }

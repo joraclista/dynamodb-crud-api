@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Builder
-public class DynamoDbLowLevelService {
+public class DynamoDBLowLevelCRUDService {
 
     private LowLevelDao dao;
     private String tableName;
     private Supplier<? extends RuntimeException> notFoundExceptionSupplier;
     
-    private DynamoDbLowLevelService(LowLevelDao dao, String tableName, Supplier<? extends RuntimeException> notFoundExceptionSupplier) {
+    private DynamoDBLowLevelCRUDService(LowLevelDao dao, String tableName, Supplier<? extends RuntimeException> notFoundExceptionSupplier) {
         if (dao == null || tableName == null || tableName.trim().isEmpty()) throw new IllegalArgumentException("Dao and tableName shouldn't be null");
         this.dao = dao;
         this.tableName = tableName;

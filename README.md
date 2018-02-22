@@ -32,7 +32,15 @@ Just run `mvn clean package`
                 .build();
 ```
 
-1.2 Create crud wrapper api passing amazon dynamodb client, table name, key representation and (optionally) supplier for "not found" exception:
-```java
+1.2 Create crud wrapper api extending from AbstractDynamoDBTableCRUDApi passing amazon dynamodb client, table name, key function and (optionally) supplier for "not found" exception:
 
+```java
+public class ProductsTableCRUDApi extends AbstractDynamoDBTableCRUDApi {
+
+    public ProductsTableCRUDApi(AmazonDynamoDB amazonDynamoDBClient) {
+       super("ShopProducts", id -> Key.builder().hashKeyName("id").hashKeyValue(id).build(), amazonDynamoDBClient, () -> new RuntimeException("Product can't be found"));
+    }
+
+}
 ```
+here in example above we create crud api to ShopProducts ddb table with simple hash key "id"

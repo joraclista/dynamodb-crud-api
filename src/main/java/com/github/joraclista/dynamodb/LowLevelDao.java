@@ -120,7 +120,7 @@ public class LowLevelDao {
         Table table = getTable(tableName);
         return getResult(table.deleteItem(new DeleteItemSpec()
                 .withPrimaryKey(getPrimaryKey(key))
-                .withReturnValues(ReturnValue.ALL_NEW)));
+                .withReturnValues(ReturnValue.NONE)));
     }
 
     private void validateArgs(Object... args) {

@@ -39,7 +39,7 @@ public abstract class BaseEditionsService {
         return dynamoDbLowLevelService.deleteItemProperties(getKey(id), fieldNames);
     }
 
-    public Map<String, Object> deleteItem(String id) {
+    public boolean deleteItem(String id) {
         return dynamoDbLowLevelService.deleteItem(getKey(id));
     }
 

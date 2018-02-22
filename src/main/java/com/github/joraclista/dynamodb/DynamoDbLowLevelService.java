@@ -54,6 +54,13 @@ public class DynamoDbLowLevelService {
         return itemMap;
     }
 
+    /**
+     * Delete single key-value pair from item with @param key where @param fieldName is passed in args
+     * @param key - affected item
+     * @param fieldName - property to delete
+     * @return key-value pairs that were left after deletion of specified properties
+     */
+
     public Map<String, Object> deleteItemProperty(Key key, String fieldName) {
         Map<String, Object> itemMap = dao.deleteItemProperty(tableName, key, Property.builder()
                 .name(fieldName)
@@ -64,6 +71,12 @@ public class DynamoDbLowLevelService {
         return itemMap;
     }
 
+    /**
+     * Delete all key-value pairs from item with @param key where @param fieldNames is passed in args
+     * @param key - affected item
+     * @param fieldNames - properties to delete
+     * @return key-value pairs that were left after deletion of specified properties
+     */
     public Map<String, Object> deleteItemProperties(Key key, Collection<String> fieldNames) {
         Map<String, Object> itemMap = dao.deleteItemProperties(tableName, key, fieldNames.stream()
                 .map(fieldName -> Property.builder().name(fieldName).build())
@@ -74,12 +87,14 @@ public class DynamoDbLowLevelService {
         return itemMap;
     }
 
-    public Map<String, Object> deleteItem(Key key) {
+    /**
+     * Delete item by key
+     * @param key
+     * @return true if item has been successfully deleted, false - otherwise
+     */
+    public boolean deleteItem(Key key) {
         Map<String, Object> itemMap = dao.deleteItem(tableName, key);
-        if (itemMap == null || itemMap.isEmpty()) {
-            throw notFoundExceptionSupplier.get();
-        }
-        return itemMap;
+        return itemMap == null || itemMap.isEmpty();
     }
 
     public Map<String, Object> getItem(Key key) {

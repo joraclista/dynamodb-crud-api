@@ -74,6 +74,14 @@ public class DynamoDbLowLevelService {
         return itemMap;
     }
 
+    public Map<String, Object> deleteItem(Key key) {
+        Map<String, Object> itemMap = dao.deleteItem(tableName, key);
+        if (itemMap == null || itemMap.isEmpty()) {
+            throw notFoundExceptionSupplier.get();
+        }
+        return itemMap;
+    }
+
     public Map<String, Object> getItem(Key key) {
         Item item = dao.getItemByKey(tableName, key);
         if (item == null) {

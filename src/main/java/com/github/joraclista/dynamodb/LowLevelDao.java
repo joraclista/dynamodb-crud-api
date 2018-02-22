@@ -1,8 +1,8 @@
 package com.github.joraclista.dynamodb;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.document.*;
 import com.amazonaws.services.dynamodbv2.document.internal.InternalUtils;
+import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
@@ -20,10 +20,8 @@ import java.util.stream.Collectors;
 public class LowLevelDao {
 
     private DynamoDB dynamoDB;
-    private DynamoDBMapper mapper;
 
-    public LowLevelDao(DynamoDBMapper mapper, DynamoDB dynamoDB) {
-        this.mapper = mapper;
+    public LowLevelDao(DynamoDB dynamoDB) {
         this.dynamoDB = dynamoDB;
     }
 
@@ -118,6 +116,13 @@ public class LowLevelDao {
                         .collect(Collectors.toList()))));
     }
 
+    public Map<String, Object> deleteItem(String tableName, Key key) {
+        Table table = getTable(tableName);
+        return getResult(table.deleteItem(new DeleteItemSpec()
+                .withPrimaryKey(getPrimaryKey(key))
+                .withReturnValues(ReturnValue.ALL_NEW)));
+    }
+
     private void validateArgs(Object... args) {
         if (args == null || args.length == 0) throw new IllegalArgumentException("No arguments provided");
         for(Object arg : args) {
@@ -128,5 +133,9 @@ public class LowLevelDao {
 
     private Map<String, Object> getResult(UpdateItemOutcome outcome) {
         return InternalUtils.toSimpleMapValue(outcome.getUpdateItemResult().getAttributes());
+    }
+
+    private Map<String, Object> getResult(DeleteItemOutcome outcome) {
+        return InternalUtils.toSimpleMapValue(outcome.getDeleteItemResult().getAttributes());
     }
 }

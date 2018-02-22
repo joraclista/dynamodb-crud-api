@@ -7,6 +7,8 @@ import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
+import com.github.joraclista.dynamodb.api.model.Key;
+import com.github.joraclista.dynamodb.api.model.Property;
 
 import java.util.LinkedList;
 import java.util.List;

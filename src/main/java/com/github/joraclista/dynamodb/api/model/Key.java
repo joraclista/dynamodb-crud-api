@@ -1,4 +1,4 @@
-package com.github.joraclista.dynamodb;
+package com.github.joraclista.dynamodb.api.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

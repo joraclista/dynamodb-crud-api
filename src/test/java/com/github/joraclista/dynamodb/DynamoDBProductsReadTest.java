@@ -4,7 +4,7 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.github.joraclista.dynamodb.impl.ProductsTableCRUDApi;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @Slf4j
 @RunWith(JUnitPlatform.class)
-public class DynamoDBEntityReadTest {
+public class DynamoDBProductsReadTest {
 
-    private static ProductsTableCRUDService productsTableCRUDService;
+    private static ProductsTableCRUDApi productsTableCRUDApi;
 
     @BeforeAll
     static void setup() {
@@ -34,13 +34,13 @@ public class DynamoDBEntityReadTest {
                 .withCredentials(new DefaultAWSCredentialsProviderChain())
                 .withRegion(Regions.US_EAST_1)
                 .build();
-        productsTableCRUDService = new ProductsTableCRUDService(new LowLevelDao(new DynamoDB(amazonClient)));
+        productsTableCRUDApi = new ProductsTableCRUDApi(amazonClient);
     }
 
     @DisplayName("Read All Items & Display Test")
     @Test
     void testAllItemsDisplay() {
-        productsTableCRUDService.getAllItems().forEach(item -> log.info("item: [id:title]=[{}:{}]", item.get("id"), item.get("title")));
+        productsTableCRUDApi.getAllItems().forEach(item -> log.info("item: [id:title]=[{}:{}]", item.get("id"), item.get("title")));
     }
 
     @DisplayName("Read Item Test")
@@ -54,9 +54,9 @@ public class DynamoDBEntityReadTest {
             "992, status, DISABLED"
     })
     void testGetItem(String id, String propertyName, Object propertyValue) {
-        productsTableCRUDService.setItemProperty(id, propertyName, propertyValue);
+        productsTableCRUDApi.setItemProperty(id, propertyName, propertyValue);
 
-        Map<String, Object> item = productsTableCRUDService.getItem(id);
+        Map<String, Object> item = productsTableCRUDApi.getItem(id);
         assertEquals(item.get(propertyName), propertyValue);
     }
 

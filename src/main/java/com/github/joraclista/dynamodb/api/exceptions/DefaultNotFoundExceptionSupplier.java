@@ -1,4 +1,4 @@
-package com.github.joraclista.dynamodb;
+package com.github.joraclista.dynamodb.api.exceptions;
 
 import java.util.function.Supplier;
 

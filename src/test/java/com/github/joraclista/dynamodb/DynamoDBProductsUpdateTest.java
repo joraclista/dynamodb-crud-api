@@ -4,7 +4,7 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.github.joraclista.dynamodb.impl.ProductsTableCRUDApi;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @Slf4j
 @RunWith(JUnitPlatform.class)
-public class DynamoDBEntityUpdateTest {
+public class DynamoDBProductsUpdateTest {
 
-    private static ProductsTableCRUDService productsTableCRUDService;
+    private static ProductsTableCRUDApi productsTableCRUDApi;
 
     @BeforeAll
     static void setup() {
@@ -34,7 +34,7 @@ public class DynamoDBEntityUpdateTest {
                 .withCredentials(new DefaultAWSCredentialsProviderChain())
                 .withRegion(Regions.US_EAST_1)
                 .build();
-        productsTableCRUDService = new ProductsTableCRUDService(new LowLevelDao(new DynamoDB(amazonClient)));
+        productsTableCRUDApi = new ProductsTableCRUDApi(amazonClient);
     }
 
     @ParameterizedTest(name = "Update Item Property Test: For item id = \"{0}\" : \"{1}\" should be \"{2}\"")
@@ -53,8 +53,8 @@ public class DynamoDBEntityUpdateTest {
     })
     @Test
     public void testSetItemProperty(String id, String propertyName, Object propertyValue) {
-        productsTableCRUDService.setItemProperty(id, propertyName, propertyValue);
-        Map<String, Object> item = productsTableCRUDService.getItem(id);
+        productsTableCRUDApi.setItemProperty(id, propertyName, propertyValue);
+        Map<String, Object> item = productsTableCRUDApi.getItem(id);
         assertEquals(item.get(propertyName), propertyValue);
     }
 
@@ -67,8 +67,8 @@ public class DynamoDBEntityUpdateTest {
     })
     @Test
     public void testSetItemProperties(String id, String propertyName1, Object propertyValue1, String propertyName2, Object propertyValue2) {
-        productsTableCRUDService.setItemProperties(id, of(propertyName1, propertyValue1, propertyName2, propertyValue2));
-        Map<String, Object> item = productsTableCRUDService.getItem(id);
+        productsTableCRUDApi.setItemProperties(id, of(propertyName1, propertyValue1, propertyName2, propertyValue2));
+        Map<String, Object> item = productsTableCRUDApi.getItem(id);
         assertEquals(item.get(propertyName1), propertyValue1);
         assertEquals(item.get(propertyName2), propertyValue2);
     }

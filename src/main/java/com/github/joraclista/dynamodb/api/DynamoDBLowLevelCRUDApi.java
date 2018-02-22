@@ -1,7 +1,11 @@
-package com.github.joraclista.dynamodb;
+package com.github.joraclista.dynamodb.api;
 
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
+import com.github.joraclista.dynamodb.api.exceptions.DefaultNotFoundExceptionSupplier;
+import com.github.joraclista.dynamodb.api.model.Key;
+import com.github.joraclista.dynamodb.LowLevelDao;
+import com.github.joraclista.dynamodb.api.model.Property;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,18 +21,18 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Builder
-public class DynamoDBLowLevelCRUDService {
+public class DynamoDBLowLevelCRUDApi {
 
     private LowLevelDao dao;
     private String tableName;
     private Supplier<? extends RuntimeException> notFoundExceptionSupplier;
     
-    private DynamoDBLowLevelCRUDService(LowLevelDao dao, String tableName, Supplier<? extends RuntimeException> notFoundExceptionSupplier) {
+    private DynamoDBLowLevelCRUDApi(LowLevelDao dao, String tableName, Supplier<? extends RuntimeException> notFoundExceptionSupplier) {
         if (dao == null || tableName == null || tableName.trim().isEmpty()) throw new IllegalArgumentException("Dao and tableName shouldn't be null");
         this.dao = dao;
         this.tableName = tableName;
         this.notFoundExceptionSupplier = notFoundExceptionSupplier == null 
-                ? new DefaultNotFoundExceptionSupplier() 
+                ? new DefaultNotFoundExceptionSupplier()
                 : notFoundExceptionSupplier;
     }
     

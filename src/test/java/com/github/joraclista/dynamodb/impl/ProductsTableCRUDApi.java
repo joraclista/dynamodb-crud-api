@@ -12,16 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProductsTableCRUDApi extends AbstractDynamoDBTableCRUDApi {
 
-    public static final String TABLE = "ShopProducts";
-    public static final String EVENT_ID = "id";
-
-
     public ProductsTableCRUDApi(AmazonDynamoDB amazonDynamoDBClient) {
-       super(TABLE, amazonDynamoDBClient, () -> new RuntimeException("Product can't be found"));
+       super("ShopProducts", id -> Key.builder().hashKeyName("id").hashKeyValue(id).build(), amazonDynamoDBClient, () -> new RuntimeException("Product can't be found"));
     }
 
-    @Override
-    protected Key getKey(String id) {
-        return Key.builder().hashKeyName(EVENT_ID).hashKeyValue(id).build();
-    }
 }
